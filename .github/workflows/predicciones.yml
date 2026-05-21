@@ -1,4 +1,4 @@
-name: Predicciones MT5
+name: name: Predicciones MT5 Daily
 
 on:
   schedule:
