@@ -2,7 +2,7 @@ name: Predicciones MT5 Daily
 
 on:
   schedule:
-    - cron: '0 22 * * 1-6'
+    - cron: '*/10 * * * *'
 
   workflow_dispatch:
 
