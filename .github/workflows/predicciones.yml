@@ -1,13 +1,18 @@
 name: Predicciones MT5 Day
 
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: '*/10 * * * *'
 
-  workflow_dispatch:
-
 permissions:
   contents: write
+  actions: read
+
+concurrency:
+  group: predicciones
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -15,29 +20,29 @@ jobs:
 
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Configurar Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Instalar dependencias
-      run: |
-        pip install -r requirements.txt
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
 
-    - name: Ejecutar script
-      run: |
-        python predicciones.py
+      - name: Ejecutar script
+        run: |
+          python predicciones.py
 
-    - name: Commit CSV
-      run: |
-        git config user.name "github-actions"
-        git config user.email "actions@github.com"
+      - name: Commit CSV
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
 
-        git add predicciones.csv
+          git add predicciones.csv
 
-        git commit -m "Actualizar predicciones" || echo "Sin cambios"
+          git commit -m "Actualizar predicciones" || echo "Sin cambios"
 
-        git push
+          git push
