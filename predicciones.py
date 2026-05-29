@@ -8,7 +8,29 @@ from pandas.tseries.offsets import BDay
 # =====================================================
 # CONFIGURACION
 # =====================================================
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import sys
 
+# Hora de Nueva York
+ahora_ny = datetime.now(ZoneInfo("America/New_York"))
+
+# Lunes=0 ... Viernes=4
+es_dia_laborable = ahora_ny.weekday() < 5
+
+# Mercado regular USA: 09:30 - 16:00
+mercado_abierto = (
+    es_dia_laborable and
+    (
+        (ahora_ny.hour > 9 or (ahora_ny.hour == 9 and ahora_ny.minute >= 30))
+        and
+        ahora_ny.hour < 16
+    )
+)
+
+if mercado_abierto:
+    print("Mercado USA abierto. No se actualiza el CSV.")
+    sys.exit(0)
 TICKERS = {
     "tecnologicas": ['TSM', 'AAPL']
 }
