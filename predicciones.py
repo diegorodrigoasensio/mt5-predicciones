@@ -3,10 +3,9 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import yfinance as yf
 import ta
-from pandas.tseries.offsets import CustomBusinessDay
-from pandas.tseries.holiday import USFederalHolidayCalendar
+import pandas_market_calendars as mcal
 
-us_bd = CustomBusinessDay(calendar=USFederalHolidayCalendar())
+nyse = mcal.get_calendar('NYSE')
 
 # =====================================================
 # CONFIGURACION
@@ -236,10 +235,14 @@ def calcular_prediccion_en_fecha(df_total, fecha_idx, ticker, grupo):
         ticker
     )
 
-    fecha_signal = (
-        df_total.index[fecha_idx] + us_bd
-    ).strftime("%Y-%m-%d")
-
+    fecha_actual = df_total.index[fecha_idx].date()
+    
+    schedule = nyse.schedule(
+        start_date=fecha_actual,
+        end_date=fecha_actual + pd.Timedelta(days=10)
+    )
+    
+    fecha_signal = schedule.index[1].strftime("%Y-%m-%d")
     # =================================================
     # FILA CSV
     # =================================================
@@ -315,9 +318,16 @@ for grupo, lista in TICKERS.items():
             )
 
             print("Fecha usada para predecir:", data.index[i])
+            fecha_actual = data.index[i].date()
+            
+            schedule = nyse.schedule(
+                start_date=fecha_actual,
+                end_date=fecha_actual + pd.Timedelta(days=10)
+            )
+            
             print(
-                "Fecha siguiente hábil USA:",
-                data.index[i] + us_bd
+                "Fecha siguiente sesión NYSE:",
+                schedule.index[1]
             )
 
             fila = calcular_prediccion_en_fecha(
