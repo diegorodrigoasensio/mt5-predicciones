@@ -3,7 +3,10 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 import yfinance as yf
 import ta
-from pandas.tseries.offsets import BDay
+from pandas.tseries.offsets import CustomBusinessDay
+from pandas.tseries.holiday import USFederalHolidayCalendar
+
+us_bd = CustomBusinessDay(calendar=USFederalHolidayCalendar())
 
 # =====================================================
 # CONFIGURACION
@@ -234,7 +237,7 @@ def calcular_prediccion_en_fecha(df_total, fecha_idx, ticker, grupo):
     )
 
     fecha_signal = (
-        df_total.index[fecha_idx] + BDay(1)
+        df_total.index[fecha_idx] + us_bd
     ).strftime("%Y-%m-%d")
 
     # =================================================
@@ -313,8 +316,8 @@ for grupo, lista in TICKERS.items():
 
             print("Fecha usada para predecir:", data.index[i])
             print(
-                "Fecha siguiente BDay:",
-                data.index[i] + BDay(1)
+                "Fecha siguiente hábil USA:",
+                data.index[i] + us_bd
             )
 
             fila = calcular_prediccion_en_fecha(
