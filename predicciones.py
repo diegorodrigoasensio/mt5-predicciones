@@ -265,6 +265,7 @@ def calcular_prediccion_en_fecha(df_total, fecha_idx, ticker, grupo):
     return fila
 
 # =====================================================
+# =====================================================
 # MAIN
 # =====================================================
 
@@ -283,11 +284,19 @@ for grupo, lista in TICKERS.items():
                 start="2000-01-01"
             )
 
+            print("Ahora NY:", ahora_ny)
+
             if len(data) == 0:
 
                 print("Sin datos:", ticker)
 
                 continue
+
+            print("Últimas 5 filas descargadas:")
+            print(data.tail(5))
+
+            print("Último índice bruto:", data.index[-1])
+            print("Última fecha descargada:", data.index[-1].date())
 
             data = add_indicators(data)
 
@@ -295,10 +304,17 @@ for grupo, lista in TICKERS.items():
 
             i = len(data) - 1
 
+            print("i =", i)
             print(
                 "Procesando:",
                 ticker,
                 data.index[i].date()
+            )
+
+            print("Fecha usada para predecir:", data.index[i])
+            print(
+                "Fecha siguiente BDay:",
+                data.index[i] + BDay(1)
             )
 
             fila = calcular_prediccion_en_fecha(
@@ -309,6 +325,7 @@ for grupo, lista in TICKERS.items():
             )
 
             if fila:
+                print("Fila generada:", fila)
                 resultados.append(fila)
 
         except Exception as e:
@@ -330,7 +347,7 @@ df_resultados.to_csv(
     index=False
 )
 
-print("\\n===================================")
+print("\n===================================")
 print("CSV generado correctamente")
 print("Total señales:", len(df_resultados))
 print("===================================")
