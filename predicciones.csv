@@ -1,1 +1,3 @@
-
+fecha,grupo,ticker,entry_long,tp_long,sl_long,entry_short,tp_short,sl_short
+2026-07-08,tecnologicas,TSM,440.17662,477.66823,415.18222,461.00529,423.51369,485.9997
+2026-07-08,tecnologicas,AAPL,300.83236,316.03771,290.69545,309.27977,294.07442,319.41668
