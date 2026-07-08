@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestRegressor
 import yfinance as yf
 import ta
 import pandas_market_calendars as mcal
+import os
 
 nyse = mcal.get_calendar('NYSE')
 
@@ -30,9 +31,23 @@ mercado_abierto = (
     )
 )
 
-if mercado_abierto:
+csv_vacio = False
+
+if os.path.exists("predicciones.csv"):
+    try:
+        df_csv = pd.read_csv("predicciones.csv")
+        csv_vacio = df_csv.empty
+    except Exception:
+        csv_vacio = True
+else:
+    csv_vacio = True
+
+if mercado_abierto and not csv_vacio:
     print("Mercado USA abierto. No se actualiza el CSV.")
     sys.exit(0)
+
+if mercado_abierto and csv_vacio:
+    print("Mercado abierto, pero el CSV está vacío. Se regenerará.")
 TICKERS = {
     "tecnologicas": ['TSM', 'AAPL']
 }
@@ -354,7 +369,10 @@ df_resultados = pd.DataFrame(resultados)
 # =====================================================
 # GUARDAR CSV
 # =====================================================
-
+if len(resultados) == 0:
+    print("ERROR: No se ha podido generar ninguna predicción.")
+    print("Se mantiene el CSV anterior.")
+    sys.exit(1)
 df_resultados.to_csv(
     "predicciones.csv",
     index=False
