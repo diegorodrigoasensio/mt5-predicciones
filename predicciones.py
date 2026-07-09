@@ -46,10 +46,10 @@ if mercado_abierto and not csv_vacio:
     print("Mercado USA abierto. No se actualiza el CSV.")
     sys.exit(0)
 
-if mercado_abierto and csv_vacio:
-    print("Mercado abierto, pero el CSV está vacío. Se regenerará.")
+#if mercado_abierto and csv_vacio:
+ #   print("Mercado abierto, pero el CSV está vacío. Se regenerará.")
 TICKERS = {
-    "tecnologicas": ['TSM', 'AAPL']
+    "tecnologicas": ['TSM', 'AAPL','NVDA']
 }
 
 ATR_SL_MULT = 1.2
