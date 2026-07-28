@@ -49,7 +49,7 @@ if mercado_abierto and not csv_vacio:
 if mercado_abierto and csv_vacio:
     print("Mercado abierto, pero el CSV está vacío. Se regenerará.")
 TICKERS = {
-    "tecnologicas": ['TSM', 'AAPL','NVDA','TSLA']
+    "tecnologicas": ['TSM', 'AAPL','NVDA','TSLA','AMD']
 }
 
 ATR_SL_MULT = 1.2
@@ -58,6 +58,7 @@ ADX_TREND_THRESHOLD = 25
 
 multiplicadores = {
     "AAPL": 1.00042,
+    "AMD": 1.00042,
     "BBVA.MC": 1.008605,
     "GOOG": 1.000348,
     "IAG.MC": 0.998109,
