@@ -1,0 +1,48 @@
+name: Generar predicciones
+
+on:
+  workflow_dispatch:
+    inputs:
+      desde:
+        description: "Fecha de señal inicial (YYYY-MM-DD). Vacío = próxima sesión"
+        required: false
+      hasta:
+        description: "Fecha de señal final (YYYY-MM-DD). Vacío = solo la fecha inicial"
+        required: false
+      tickers:
+        description: "Tickers separados por comas (ej: AMD,AAPL). Vacío = los del script"
+        required: false
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias
+        run: pip install pandas numpy scikit-learn yfinance ta pandas_market_calendars pytz python-dateutil
+
+      - name: Ejecutar script
+        env:
+          DESDE: ${{ inputs.desde }}
+          HASTA: ${{ inputs.hasta }}
+          TICKERS: ${{ inputs.tickers }}
+        run: |
+          ARGS=()
+          [ -n "$DESDE" ]   && ARGS+=(--desde "$DESDE")
+          [ -n "$HASTA" ]   && ARGS+=(--hasta "$HASTA")
+          [ -n "$TICKERS" ] && ARGS+=(--tickers "$TICKERS")
+          python generar_rango_predicciones.py "${ARGS[@]}"
+
+      - name: Guardar resultado
+        uses: actions/upload-artifact@v4
+        with:
+          name: predicciones
+          path: |
+            predicciones_addpred.txt
+            predicciones.csv
+          if-no-files-found: ignore
