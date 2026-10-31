@@ -244,7 +244,7 @@ def calcular_prediccion_en_fecha(df_total, fecha_idx, ticker, grupo, fecha_signa
     y = dfc['Target']
 
     model_close = RandomForestRegressor(
-        n_estimators=100, max_depth=20, min_samples_leaf=2,
+        n_estimators=300, max_depth=20, min_samples_leaf=2,
         random_state=42, n_jobs=-1
     )
     model_close.fit(X, y)
