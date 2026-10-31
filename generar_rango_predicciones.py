@@ -84,11 +84,11 @@ def sesiones_nyse(ini, fin):
 #   - DESDE y HASTA  -> todas las sesiones NYSE del rango (inclusive)
 # Tambien se pueden pasar por linea de comandos (tienen prioridad):
 #   python generar_predicciones.py --desde 2026-06-01 --hasta 2026-07-10
-FECHA_DESDE = None
-FECHA_HASTA = None
+FECHA_DESDE = "2021-01-01"
+FECHA_HASTA = "2026-11-02"
 
 TICKERS = {
-    "tecnologicas": ['TSM', 'AAPL', 'NVDA', 'TSLA', 'AMD']
+    "tecnologicas": ['AMD']
 }
 
 ATR_SL_MULT = 1.2
